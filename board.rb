@@ -31,4 +31,29 @@ class Board
             self[randArray].bombStatus = true
         end
     end
+
+    def reveal(posArray)
+        self[posArray].reveal
+        return self[posArray].bombStatus
+    end
+
+    def render
+        puts "-" * 30
+        for row in @board
+            outputString = "|"
+            for ele in row
+                if !ele.revealed
+                    outputString += " _ |"
+                else
+                    if ele.bombStatus
+                        outputString += " X |"
+                    else
+                        outputString += " #{ele.neighborBombCount} |"
+                    end
+                end
+            end
+            puts outputString
+        end
+        puts "-" * 30
+    end
 end
