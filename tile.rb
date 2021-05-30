@@ -2,21 +2,21 @@ require_relative './board.rb'
 
 class Tile
 
-    attr_accessor :neighborBombCount
-    
-    def initialize(bombStatus)
-        @bombStatus = bombStatus
+    attr_accessor :neighborBombCount, :bombStatus
+
+    def initialize()
+        @bombStatus = false
         @revealed = false
         @flagged = false
         @neighborBombCount = 0
     end
 
-    def flag(posArray)
+    def flag
         @flagged = true
         return nil
     end
 
-    def reveal(posArray)
+    def reveal
         @revealed = true
         return nil
     end
