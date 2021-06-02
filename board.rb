@@ -56,4 +56,8 @@ class Board
         end
         puts "-" * 30
     end
+
+    def checkNeighbors()
+    end
+
 end
