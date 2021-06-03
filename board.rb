@@ -57,7 +57,27 @@ class Board
         puts "-" * 30
     end
 
-    def checkNeighbors()
+    def checkNeighbors(posArray)
+        #read bookmarked page page 8 to understand algo
+        neighborMatrices = {"upLeft" => [-1,-1], "up" => [-1,0], "upRight" => [-1, 1], "left" => [0,-1], "right"=> [0,1], "downLeft" => [1,-1], "down" => [1,0], "downRight" => [1,1]}
+        for key in neighborMatrices.keys
+            #set x and y equal to origin
+            x, y = posArray
+            x += neighborMatrices[key][0]
+            y += neighborMatrices[key][1] #add x and y offset
+
+            neighborPos = [x,y]
+            if !self[neighborPos].revealed # check if tile has not been revealed
+                if self[neighborPos].bombStatus
+                    self[posArray].increment
+                else
+                    
+                end
+            end
+        end
+    end
+
+    def checkStatus(posArray)
     end
 
 end
