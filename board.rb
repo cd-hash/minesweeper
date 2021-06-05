@@ -38,12 +38,13 @@ class Board
     end
 
     def render
+        rowCounter = 0
         puts "-" * 30
         for row in @board
-            outputString = "|"
+            outputString = "#{rowCounter} |"
             for ele in row
                 if !ele.revealed
-                    outputString += " _ |"
+                    outputString += "|_ "
                 else
                     if ele.bombStatus
                         outputString += " X |"
@@ -53,6 +54,7 @@ class Board
                 end
             end
             puts outputString
+            rowCounter += 1
         end
         puts "-" * 30
     end

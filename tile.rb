@@ -5,7 +5,7 @@ class Tile
     attr_accessor :bombStatus
     attr_reader :revealed, :neighborBombCount
 
-    def initialize()
+    def initialize(gameBoard)
         @bombStatus = false
         @revealed = false
         @flagged = false
