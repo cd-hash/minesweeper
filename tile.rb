@@ -1,11 +1,11 @@
-require_relative './board.rb'
+
 
 class Tile
 
     attr_accessor :bombStatus
     attr_reader :revealed, :neighborBombCount
 
-    def initialize(gameBoard)
+    def initialize()
         @bombStatus = false
         @revealed = false
         @flagged = false
@@ -23,7 +23,11 @@ class Tile
     end
     
     def to_s
-        return @neighborBombCount.to_s
+        if @bombStatus
+            return "X"
+        else
+            return @neighborBombCount.to_s
+        end
     end
 
     def increment
