@@ -9,7 +9,7 @@ class Tile
         @bombStatus = false
         @revealed = false
         @flagged = false
-        @neighborBombCount = 0
+        @neighborBombCount = nil
     end
 
     def flag
@@ -31,6 +31,11 @@ class Tile
     end
 
     def increment
-        @neighborBombCount += 1
+        if @neighborBombCount
+            @neighborBombCount += 1
+        else
+            @neighborBombCount = 1
+        end
+        
     end
 end

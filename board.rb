@@ -4,9 +4,10 @@ require_relative './tile.rb'
 class Board
 
     def initialize(size = 3)
+        @size = size
         @board = Array.new(size) {Array.new(size) {|ele| ele = Tile.new()}}
         @neighborMatrices = {"upLeft" => [-1,-1], "up" => [-1,0], "upRight" => [-1, 1], "left" => [0,-1], "right"=> [0,1], "downLeft" => [1,-1], "down" => [1,0], "downRight" => [1,1]}
-        @bombNum = 2
+        @bombNum = 1
     end
 
     def numBombs()
@@ -15,7 +16,11 @@ class Board
 
     def [](posArray)
         row, col = posArray
-        return @board[row][col]
+        if row < 0 || row > @size - 1 || col < 0 || col > @size - 1
+            return false
+        else
+            return @board[row][col]
+        end
     end
 
     def []=(posArray)
@@ -38,11 +43,22 @@ class Board
         for row in 0...@board.length
             for col in 0...@board[row].length
                 posArray = [row, col]
+                
                 if self[posArray].bombStatus
-                    
+                    # debugger
+                    for key in @neighborMatrices.keys
+                        newRow = posArray[0] + @neighborMatrices[key][0]
+                        newCol = posArray[1] + @neighborMatrices[key][1]
+                        newPosition = [newRow, newCol]
+
+                        if self[newPosition] && !self[newPosition].bombStatus
+                            self[newPosition].increment
+                        end
+                    end
                 end
             end
         end
+        return nil
     end
 
     def reveal(posArray)
@@ -73,27 +89,24 @@ class Board
     end
 
     def checkNeighbors(posArray)
+        row, col = posArray
+        #assume the postition is not a bomb
         #read bookmarked page page 8 to understand algo
-        
-        for key in neighborMatrices.keys
-            #set x and y equal to origin
-            x, y = posArray
-            x += neighborMatrices[key][0]
-            y += neighborMatrices[key][1] #add x and y offset
+        for key in @neighborMatrices
+            # debugger
+            newRow = row + @neighborMatrices[key][0]
+            newCol = col + @neighborMatrices[key][1]
+            newPosition = [newRow, newCol]
 
-            neighborPos = [x,y]
-            if !self[neighborPos].revealed # check if tile has not been revealed
-                if self[neighborPos].bombStatus
-                    self[posArray].increment
-                else
-                    
-                end
+            if self[newPosition] && !self[newPosition].neighborBombCount
+                reveal(newPosition)
+                checkNeighbors(newPosition)
+            else
+                return
             end
         end
     end
 
-    def checkStatus(posArray)
-    end
 
     def revealAll()
         rowCounter = 0
