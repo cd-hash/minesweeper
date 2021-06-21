@@ -92,7 +92,7 @@ class Board
         row, col = posArray
         #assume the postition is not a bomb
         #read bookmarked page page 8 to understand algo
-        for key in @neighborMatrices
+        for key in @neighborMatrices.keys
             # debugger
             newRow = row + @neighborMatrices[key][0]
             newCol = col + @neighborMatrices[key][1]
