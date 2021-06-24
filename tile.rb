@@ -19,7 +19,7 @@ class Tile
 
     def reveal
         @revealed = true
-        return nil
+        return @bombStatus
     end
     
     def to_s

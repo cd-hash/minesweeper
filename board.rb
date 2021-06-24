@@ -62,8 +62,25 @@ class Board
     end
 
     def reveal(posArray)
+        if self[posArray].reveal
+            return false # we hit a bomb game over
+        elsif self[posArray].neighborBombCount # we hit a tile adjacent to a bomb
+            self[posArray].reveal
+            return true
+        end
         self[posArray].reveal
-        return self[posArray].bombStatus
+        # debugger
+        for key in @neighborMatrices.keys
+            row, col = posArray
+            newRow = row + @neighborMatrices[key][0]
+            newCol = col + @neighborMatrices[key][1]
+            newPosition = [newRow, newCol]
+            # check if position is valid and has not already been revealed
+            if self[newPosition] && !self[newPosition].revealed  
+                reveal(newPosition)
+            end
+        end
+        return true
     end
 
     def render
@@ -88,24 +105,6 @@ class Board
         puts "-" * 30
     end
 
-    def checkNeighbors(posArray)
-        row, col = posArray
-        #assume the postition is not a bomb
-        #read bookmarked page page 8 to understand algo
-        for key in @neighborMatrices.keys
-            # debugger
-            newRow = row + @neighborMatrices[key][0]
-            newCol = col + @neighborMatrices[key][1]
-            newPosition = [newRow, newCol]
-
-            if self[newPosition] && !self[newPosition].neighborBombCount
-                reveal(newPosition)
-                checkNeighbors(newPosition)
-            else
-                return
-            end
-        end
-    end
 
 
     def revealAll()
