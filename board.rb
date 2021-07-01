@@ -121,4 +121,8 @@ class Board
         puts "-" * 30
     end
 
+    def flagTile(posArray)
+        self[posArray].flag
+        return true
+    end
 end
