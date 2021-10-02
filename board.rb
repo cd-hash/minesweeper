@@ -27,7 +27,7 @@ class Board
         row, col = posArray
         @board[row][col].reveal()
         return true
-    end
+    end 
 
 
     def placeBombs()
