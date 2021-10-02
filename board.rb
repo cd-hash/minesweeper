@@ -3,11 +3,12 @@ require_relative './tile.rb'
 
 class Board
 
-    def initialize(size = 3)
+    def initialize(size)
         @size = size
         @board = Array.new(size) {Array.new(size) {|ele| ele = Tile.new()}}
         @neighborMatrices = {"upLeft" => [-1,-1], "up" => [-1,0], "upRight" => [-1, 1], "left" => [0,-1], "right"=> [0,1], "downLeft" => [1,-1], "down" => [1,0], "downRight" => [1,1]}
-        @bombNum = 1
+        @bombNum = size % (size * size)
+        @numRevealed = 0
     end
 
     def numBombs()
@@ -16,6 +17,8 @@ class Board
 
     def [](posArray)
         row, col = posArray
+        row = row.to_i
+        col = col.to_i
         if row < 0 || row > @size - 1 || col < 0 || col > @size - 1
             return false
         else
@@ -66,9 +69,11 @@ class Board
             return false # we hit a bomb game over
         elsif self[posArray].neighborBombCount # we hit a tile adjacent to a bomb
             self[posArray].reveal
+            @numRevealed += 1
             return true
         end
         self[posArray].reveal
+        @numRevealed += 1
         # debugger
         for key in @neighborMatrices.keys
             row, col = posArray
@@ -85,17 +90,18 @@ class Board
 
     def render
         rowCounter = 0
+        puts "   0   1   2   "
         puts "-" * 30
         for row in @board
             outputString = "#{rowCounter} |"
             for ele in row
                 if !ele.revealed
-                    outputString += "|_ "
+                    outputString += "_  |"
                 else
                     if ele.bombStatus
-                        outputString += " X |"
+                        outputString += " X  |"
                     else
-                        outputString += " #{ele.neighborBombCount} |"
+                        outputString += " #{ele.neighborBombCount}  |"
                     end
                 end
             end
@@ -107,13 +113,14 @@ class Board
 
 
 
-    def revealAll()
+    def cheat()
         rowCounter = 0
+        puts "   0   1   2   "
         puts "-" * 30
         for row in @board
             outputString = "#{rowCounter} |"
             for ele in row
-                outputString += "#{ele.to_s}"
+                outputString += "#{ele.to_s}   |"
             end
             puts outputString
             rowCounter += 1
@@ -124,5 +131,13 @@ class Board
     def flagTile(posArray)
         self[posArray].flag
         return true
+    end
+
+    def won?()
+        gridArea = @size * @size
+        if gridArea - @numRevealed == @bombNum
+            return true
+        end
+        return false
     end
 end
