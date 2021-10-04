@@ -3,6 +3,7 @@ require_relative './board.rb'
 class Game
     def initialize(size = 3)
         @gameBoard = Board.new(size)
+        @gameOver = true
     end
 
     def getCommand()
@@ -11,9 +12,9 @@ class Game
 
         case cmd
         when "flag"
-            @gameBoard.flagTile(*args)
+            @gameBoard.flagTile(args)
         when "guess"
-            @gameBoard.reveal(args)
+            return @gameBoard.reveal(args)
         when "cheat"
             @gameBoard.cheat()
         else
@@ -22,7 +23,22 @@ class Game
     end
 
     def play()
-
+        @gameBoard.placeBombs()
+        @gameBoard.getNeighborBombCount()
+        @gameBoard.cheat()
+        while !@gameBoard.won?
+            if !getCommand()
+                @gameBoard.render()
+                @gameOver = false
+                break
+            end
+            @gameBoard.render()
+        end
+        if @gameOver
+            puts "You Won!!!"
+        else
+            puts "You Lost!!"
+        end
     end
 end
 
